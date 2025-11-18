@@ -1,47 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Timer</title>
-  <link rel="stylesheet" href="./css/styles.css" />
+    <meta charset="UTF-8" />
+    <title>Timer</title>
+   <link rel="stylesheet" href="./css/styles.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
 </head>
 
 <body>
-  <div class="timer-wrapper">
-  <input type="text" id="datetime-picker" />
-  <button type="button" data-start disabled>Start</button>
+    <h2>Таймер</h2>
 
-  <div class="timer">
-    <div class="field">
-      <span class="value" data-days>00</span>
-      <span class="label">Days</span>
+    <input id="datetime-picker" type="text" placeholder="Виберіть дату" />
+
+    <button data-start>Start</button>
+
+    <div class="timer">
+        <div class="field">
+            <span data-days>00</span>
+            <div class="label">Days</div>
+        </div>
+        <div class="field">
+            <span data-hours>00</span>
+            <div class="label">Hours</div>
+        </div>
+        <div class="field">
+            <span data-minutes>00</span>
+            <div class="label">Minutes</div>
+        </div>
+        <div class="field">
+            <span data-seconds>00</span>
+            <div class="label">Seconds</div>
+        </div>
     </div>
-    <div class="field">
-      <span class="value" data-hours>00</span>
-      <span class="label">Hours</span>
-    </div>
-    <div class="field">
-      <span class="value" data-minutes>00</span>
-      <span class="label">Minutes</span>
-    </div>
-    <div class="field">
-      <span class="value" data-seconds>00</span>
-      <span class="label">Seconds</span>
-    </div>
-  </div>
-</div>
-  <main>
-    <div class="container">
-      <a class="back-link" href="./index.html">Go back</a>
-      <h1 class="main-title">
-        Timer
-      </h1>
-    </div>
-  </main>
-  <script type="module" src="./js/1-timer.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+
+    <script type="module" src="./js/1-timer.js"></script>
+
 </body>
-
 </html>
