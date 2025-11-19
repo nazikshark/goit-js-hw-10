@@ -1,84 +1,75 @@
-import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
-import iziToast from "izitoast";
-import "izitoast/dist/css/iziToast.min.css";
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
-const refs = {
-  input: document.querySelector("#datetime-picker"),
-  btnStart: document.querySelector("[data-start]"),
+const input = document.querySelector('#datetime-picker');
+const btnStart = document.querySelector('[data-start]');
+const daysEl = document.querySelector('[data-days]');
+const hoursEl = document.querySelector('[data-hours]');
+const minsEl = document.querySelector('[data-minutes]');
+const secsEl = document.querySelector('[data-seconds]');
 
-  days: document.querySelector("[data-days]"),
-  hours: document.querySelector("[data-hours]"),
-  minutes: document.querySelector("[data-minutes]"),
-  seconds: document.querySelector("[data-seconds]"),
-};
-
-let userSelectedDate = null;
+let userDate = null;
 let timerId = null;
 
-refs.btnStart.disabled = true;
+btnStart.disabled = true;
 
-flatpickr("#datetime-picker", {
+const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
 
   onClose(selectedDates) {
-    const selected = selectedDates[0];
+    const now = new Date();
 
-    if (selected <= new Date()) {
-      refs.btnStart.disabled = true;
-
+    if (selectedDates[0] <= now) {
       iziToast.error({
-        message: "Please choose a date in the future",
-        position: "topRight",
+        title: 'Error',
+        message: 'Please choose a date in the future!',
       });
+      btnStart.disabled = true;
       return;
     }
 
-    userSelectedDate = selected;
-    refs.btnStart.disabled = false;
+    userDate = selectedDates[0];
+    btnStart.disabled = false;
   },
-});
+};
 
-refs.btnStart.addEventListener("click", () => {
-  refs.btnStart.disabled = true;
-  refs.input.disabled = true;
+flatpickr(input, options);
+
+btnStart.addEventListener('click', () => {
+  btnStart.disabled = true;
+  input.disabled = true;
 
   timerId = setInterval(() => {
-    const ms = userSelectedDate - new Date();
+    const diff = userDate - new Date();
 
-    if (ms <= 0) {
+    if (diff <= 0) {
       clearInterval(timerId);
-      updateTimerInterface(0);
-
-      refs.input.disabled = false;
-      refs.btnStart.disabled = true;
-
       iziToast.success({
-        message: "Time is up!",
-        position: "topRight",
+        title: 'Done!',
+        message: 'The countdown has ended.',
       });
 
+      input.disabled = false;
       return;
     }
 
-    const time = convertMs(ms);
-    updateTimerInterface(time);
+    const { days, hours, minutes, seconds } = convertMs(diff);
+
+    daysEl.textContent = addLeadingZero(days);
+    hoursEl.textContent = addLeadingZero(hours);
+    minsEl.textContent = addLeadingZero(minutes);
+    secsEl.textContent = addLeadingZero(seconds);
   }, 1000);
 });
 
-function updateTimerInterface({ days, hours, minutes, seconds }) {
-  refs.days.textContent = addLeadingZero(days);
-  refs.hours.textContent = addLeadingZero(hours);
-  refs.minutes.textContent = addLeadingZero(minutes);
-  refs.seconds.textContent = addLeadingZero(seconds);
-}
-
 function addLeadingZero(value) {
-  return String(value).padStart(2, "0");
+  return String(value).padStart(2, '0');
 }
 
 function convertMs(ms) {
@@ -89,8 +80,8 @@ function convertMs(ms) {
 
   const days = Math.floor(ms / day);
   const hours = Math.floor((ms % day) / hour);
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  const minutes = Math.floor((ms % hour) / minute);
+  const seconds = Math.floor((ms % minute) / second);
 
   return { days, hours, minutes, seconds };
 }
